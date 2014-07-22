@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <!-- 配置SessionFactory -->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref local="dataSource" />
+        </property>
+        <!-- 配置Hibernate的属性 -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">false</prop>
+            </props>
+        </property>
+        <!-- 指定Hibernate映射文件的路径 -->
+        <property name="mappingResources">
+            <list>
+
+            </list>
+        </property>
+    </bean>
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:mysql://w.rdc.sae.sina.com.cn:3307/app_tjuscstwwx?useUnicode=true&amp;characterEncoding=UTF-8</value>
+        </property>
+        <property name="username">
+            <value>n1mylnznj0</value>
+        </property>
+        <property name="password">
+            <value>l052whl51myzi4k44mx0zk3kwxy5i0k01x5mimih</value>
+        </property>
+    </bean>
+
+
+    <!-- 配置Dao -->
+
+
+    <!-- 配置Service -->
+
+
+    <!-- 配置Action -->
+    <bean id="index" class="org.tju.wx.action.WXMsgProcessAction" abstract="false" lazy-init="default" autowire="default">
+
+    </bean>
+</beans>

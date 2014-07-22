@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+    <!--
+        Created by the Middlegen Hibernate plugin 2.2
+
+        http://boss.bekk.no/boss/middlegen/
+        http://www.hibernate.org/
+    -->
+
+    <class
+            name="org.tju.wx.pojo.Letter"
+            table="letter"
+            lazy="true"
+            >
+
+        <id
+                name="lid"
+                type="java.lang.Integer"
+                column="lid"
+                >
+            <generator class="increment" />
+        </id>
+
+        <property
+                name="receiver"
+                type="java.lang.String"
+                column="receiver"
+                length="20"
+                not-null="true"/>
+
+        <property
+            name="sender"
+            column="sender"
+            type="java.lang.String"
+            length="20"
+            not-null="false"/>
+
+        <property
+                name="senderaddr"
+                column="senderaddr"
+                type="java.lang.String"
+                length="50"
+                not-null="false"/>
+
+        <property
+                name="time"
+                column="time"
+                type="java.lang.String"
+                not-null="false"/>
+
+        <property
+                name="status"
+                column="status"
+                type="java.lang.Integer"
+                not-null="true"/>
+
+    </class>
+</hibernate-mapping>
