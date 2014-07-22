@@ -21,6 +21,13 @@ public interface LetterDao {
     boolean update(Letter letter);
 
     /**
+     * 通过lid查询
+     * @param lid
+     * @return
+     */
+    Letter findById(int lid);
+
+    /**
      * 获得全部新建信息，时间降序排序，分页返回
      * @param pageNum 页数
      * @param maxNum 每页数量

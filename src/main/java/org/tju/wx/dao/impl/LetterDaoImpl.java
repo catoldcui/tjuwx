@@ -18,6 +18,14 @@ public class LetterDaoImpl implements LetterDao{
     SessionFactory sessionFactory;
     HibernateTemplate hibernateTemplate;
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+        this.hibernateTemplate = hibernateTemplate;
+    }
+
     public void setSessionFactory(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
     }
@@ -34,7 +42,7 @@ public class LetterDaoImpl implements LetterDao{
         try{
             // 匹配收件人，寄件人，寄信地址
             Query query = getHibernateTemplate().getSessionFactory().getCurrentSession()
-                    .createQuery( "from letter l where l.receiver=:receiver or l.sender=:sender or l.senderaddr=:senderaddr");
+                    .createQuery( "from Letter l where l.receiver=:receiver or l.sender=:sender or l.senderaddr=:senderaddr");
             query.setString("sender", key);
             query.setString("receiver", key);
             query.setString("senderaddr", key);
@@ -91,11 +99,21 @@ public class LetterDaoImpl implements LetterDao{
     }
 
     @Override
+    public Letter findById(int lid) {
+        List result = getHibernateTemplate().find("from Letter l where l.lid=?", lid);
+        if(result.isEmpty()){
+            return null;
+        } else {
+            return (Letter)result.get(0);
+        }
+    }
+
+    @Override
     public List getAll(final int pageNum,final int maxNum) {
         return getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException {
-                Query query = session.createQuery("from letter l order by l.time desc");
+                Query query = session.createQuery("from Letter l order by l.time desc");
                 query.setMaxResults(maxNum);
                 query.setFirstResult( ( pageNum - 1 ) * maxNum);
                 return query.list();

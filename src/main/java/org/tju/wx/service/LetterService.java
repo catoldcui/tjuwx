@@ -34,4 +34,11 @@ public interface LetterService {
      * @return
      */
     boolean sendLetter(Letter letter);
+
+    /**
+     * 更改信到未取状态
+     * @param letter status：1：信件在团委 2：信件已取
+     * @return
+     */
+    boolean backLetter(Letter letter);
 }

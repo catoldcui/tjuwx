@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	font-family:"微软雅黑";
+	padding-top: 50px;
+}
+
+.perinfo{
+	background-color:#D5D9BA;
+	height:1000px;
+}
+

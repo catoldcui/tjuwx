@@ -18,7 +18,7 @@
         <!-- 指定Hibernate映射文件的路径 -->
         <property name="mappingResources">
             <list>
-                <value>org/tju/wx/pojo/Letter.hbm.xml</value>
+                <value>/org/tju/wx/pojo/Letter.hbm.xml</value>
             </list>
         </property>
     </bean>
@@ -43,13 +43,27 @@
 
 
     <!-- 配置Dao -->
-
+    <bean id="letterDao" class="org.tju.wx.dao.impl.LetterDaoImpl" abstract="false" lazy-init="default" autowire="default">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
 
     <!-- 配置Service -->
-
+    <bean id="letterService" class="org.tju.wx.service.impl.LetterServiceImpl" abstract="false" lazy-init="default" autowire="default">
+        <property name="letterDao">
+            <ref bean="letterDao" />
+        </property>
+    </bean>
 
     <!-- 配置Action -->
     <bean id="index" class="org.tju.wx.action.WXMsgProcessAction" abstract="false" lazy-init="default" autowire="default">
 
+    </bean>
+
+    <bean id="letterAction" class="org.tju.wx.action.LetterAction" abstract="false" lazy-init="default" autowire="default">
+        <property name="letterService">
+            <ref bean="letterService" />
+        </property>
     </bean>
 </beans>

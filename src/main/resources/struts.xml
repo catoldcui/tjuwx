@@ -9,6 +9,20 @@
 
         <action name="index" class="org.tju.wx.action.WXMsgProcessAction"/>
 
+        <action name="letter" class="org.tju.wx.action.LetterAction">
+            <result name="success">/Admin/letter/add_letter.jsp</result>
+            <result name="add" type="redirect">/Admin/letter/add_letter.jsp</result>
+        </action>
+        <action name="addletter" class="org.tju.wx.action.LetterAction" method="add">
+            <result name="success">/Admin/letter/add_letter.jsp</result>
+            <result name="input">/Admin/letter/add_letter.jsp</result>
+        </action>
+
+        <action name="getletter" class="org.tju.wx.action.LetterAction" method="getAll">
+            <param name="pagenum">1</param>
+            <result name="success">/Admin/letter/letter_list.jsp</result>
+            <result name="error">/Admin/letter/index.jsp</result>
+        </action>
     </package>
 
 </struts>

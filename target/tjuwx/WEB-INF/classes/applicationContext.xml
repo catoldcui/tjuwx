@@ -18,7 +18,7 @@
         <!-- 指定Hibernate映射文件的路径 -->
         <property name="mappingResources">
             <list>
-
+                <value>/org/tju/wx/pojo/Letter.hbm.xml</value>
             </list>
         </property>
     </bean>
@@ -28,25 +28,42 @@
             <value>com.mysql.jdbc.Driver</value>
         </property>
         <property name="url">
-            <value>jdbc:mysql://w.rdc.sae.sina.com.cn:3307/app_tjuscstwwx?useUnicode=true&amp;characterEncoding=UTF-8</value>
+            <!--<value>jdbc:mysql://w.rdc.sae.sina.com.cn:3307/app_tjuscstwwx?useUnicode=true&amp;characterEncoding=UTF-8</value>-->
+            <value>jdbc:mysql://localhost:3306/tjutwwxscs?useUnicode=true&amp;characterEncoding=UTF-8</value>
         </property>
         <property name="username">
-            <value>n1mylnznj0</value>
+            <!--<value>n1mylnznj0</value>-->
+            <value>root</value>
         </property>
         <property name="password">
-            <value>l052whl51myzi4k44mx0zk3kwxy5i0k01x5mimih</value>
+            <!--<value>l052whl51myzi4k44mx0zk3kwxy5i0k01x5mimih</value>-->
+            <value>123123</value>
         </property>
     </bean>
 
 
     <!-- 配置Dao -->
-
+    <bean id="letterDao" class="org.tju.wx.dao.impl.LetterDaoImpl" abstract="false" lazy-init="default" autowire="default">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
 
     <!-- 配置Service -->
-
+    <bean id="letterService" class="org.tju.wx.service.impl.LetterServiceImpl" abstract="false" lazy-init="default" autowire="default">
+        <property name="letterDao">
+            <ref bean="letterDao" />
+        </property>
+    </bean>
 
     <!-- 配置Action -->
     <bean id="index" class="org.tju.wx.action.WXMsgProcessAction" abstract="false" lazy-init="default" autowire="default">
 
+    </bean>
+
+    <bean id="letterAction" class="org.tju.wx.action.LetterAction" abstract="false" lazy-init="default" autowire="default">
+        <property name="letterService">
+            <ref bean="letterService" />
+        </property>
     </bean>
 </beans>
