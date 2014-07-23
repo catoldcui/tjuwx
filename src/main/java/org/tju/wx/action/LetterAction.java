@@ -10,6 +10,7 @@ import org.tju.wx.service.LetterService;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Administrator on 2014/7/21.
@@ -21,14 +22,39 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
     /**
      * 每页的数量
      */
-    private static int ELENUM = 10;
-    private int pageNum;
+    public static int ELENUM = 5;
+    private String pageNum;
+    /**
+     * 上一个链接
+     */
+    private String preAction;
 
-    public void setPageNum(int pageNum) {
+    /**
+     * 查询的关键字，1-10个字
+     */
+    private String key;
+
+    public String getPreAction() {
+        return preAction;
+    }
+
+    public void setPreAction(String preAction) {
+        this.preAction = preAction;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setPageNum(String pageNum) {
         this.pageNum = pageNum;
     }
 
-    public int getPageNum() {
+    public String getPageNum() {
         return pageNum;
     }
 
@@ -73,22 +99,29 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
      */
     public String getAll(){
         // pageNum小于等于0 恢复第一页
-        System.out.println("pageNum:" + pageNum);
-        if(pageNum <= 0){
-            pageNum = 1;
+        //System.out.println("pageNum:" + pageNum);
+        int pageN = 0;
+        try{
+            pageN = Integer.parseInt(pageNum);
+        } catch (Exception e){
+            return ERROR;
+        }
+
+        if(pageN <= 0){
+            pageN = 1;
         }
         int count = getCount();
-        int totalPageNum = count / ELENUM + 1;
+        int totalPageNum = (count - 1) / ELENUM + 1;
 
         //pagenum大于最大页，恢复最后一页
-        if(pageNum > totalPageNum){
-            pageNum = totalPageNum;
+        if(pageN > totalPageNum){
+            pageN = totalPageNum;
         }
-        ActionContext.getContext().getSession().put("pageNum", pageNum);
+        ActionContext.getContext().getSession().put("pageNum", pageN);
         ActionContext.getContext().getSession().put("totalpage", totalPageNum);
         ActionContext.getContext().getSession().put("count", count);
 
-        List list = letterService.getAll(pageNum, ELENUM);
+        List list = letterService.getAll(pageN, ELENUM);
         ActionContext.getContext().getSession().put("letterlist", list);
         return SUCCESS;
     }
@@ -106,7 +139,129 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
         return list.size();
     }
 
-    public void setLetter(Letter letter){ this.letter = letter;}
+    /**
+     * 删除信
+     * @return
+     */
+    public String delete(){
+        System.out.println("delete lid:" + letter.getLid());
+        if(letter.getLid() == 0){
+            addActionError("删除失败");
+            return ERROR;
+        }
+
+
+        if(!letterService.delete(letter)){
+            addActionError("删除失败");
+            return ERROR;
+        } else {
+            pageNum = ActionContext.getContext().getSession().get("pageNum").toString();
+            getAll();
+            addActionMessage("删除成功");
+            return SUCCESS;
+        }
+    }
+
+    /**
+     * 取走信
+     * @return
+     */
+    public String send(){
+        System.out.println("sender lid:" + letter.getLid());
+        if(letter.getLid() == 0){
+            addActionError("更新失败");
+            return ERROR;
+        }
+
+        if(!letterService.sendLetter(letter)){
+            addActionError("更新失败");
+            return ERROR;
+        } else {
+            if(ActionContext.getContext().getSession().get("pageNum") == null){
+                pageNum = "1";
+            } else {
+                pageNum = ActionContext.getContext().getSession().get("pageNum").toString();
+            }
+            getAll();
+            addActionMessage("更新成功");
+            return SUCCESS;
+        }
+    }
+
+    /**
+     * 取回信
+     * @return
+     */
+    public String back(){
+        System.out.println("back lid:" + letter.getLid());
+        if(letter.getLid() == 0){
+            addActionError("更新失败");
+            return ERROR;
+        }
+
+        if(!letterService.backLetter(letter)){
+            addActionError("更新失败");
+            return ERROR;
+        } else {
+            if(ActionContext.getContext().getSession().get("pageNum") == null){
+                pageNum = "1";
+            } else {
+                pageNum = ActionContext.getContext().getSession().get("pageNum").toString();
+            }
+            getAll();
+            addActionMessage("更新成功");
+            return SUCCESS;
+        }
+    }
+
+    /**
+     * 通过关键字查询信件信息
+     * @return
+     */
+    public String search(){
+        System.out.println("key: " + key + "\npageNum: " + pageNum);
+        if(key.length() < 1 || key.length() > 10){
+            return ERROR;
+        }
+
+        // pageNum小于等于0 恢复第一页
+        //System.out.println("pageNum:" + pageNum);
+        int pageN = 0;
+        try{
+            pageN = Integer.parseInt(pageNum);
+        } catch (Exception e){
+            return ERROR;
+        }
+
+        if(pageN <= 0){
+            pageN = 1;
+        }
+        List allResult = letterService.findByString(key, 1, Integer.MAX_VALUE);
+
+        int count = 0;
+        if(allResult != null){
+            count  = allResult.size();
+        } else {
+            return SUCCESS;
+        }
+
+        int totalPageNum = (count - 1) / ELENUM + 1;
+
+        //pagenum大于最大页，恢复最后一页
+        if(pageN > totalPageNum){
+            pageN = totalPageNum;
+        }
+        ActionContext.getContext().getSession().put("searchPageNum", pageN);
+        ActionContext.getContext().getSession().put("searchTotalpage", totalPageNum);
+        ActionContext.getContext().getSession().put("searchCount", count);
+        ActionContext.getContext().getSession().put("key", key);
+
+        List list = letterService.findByString(key, pageN, ELENUM);
+        ActionContext.getContext().getSession().put("searchLetterlist", list);
+        return SUCCESS;
+    }
+
+    public void setLetter(Letter letter){ this.letter = letter; }
 
     public Letter getLetter() { return letter; }
 

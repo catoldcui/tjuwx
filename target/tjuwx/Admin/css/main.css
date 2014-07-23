@@ -5,8 +5,49 @@ body{
 	padding-top: 50px;
 }
 
-.perinfo{
-	background-color:#D5D9BA;
-	height:1000px;
+
+.btn{
+	font-size:15px;
+
 }
 
+.message{
+    font-size:15px;
+    padding-top:20px;
+}
+
+#js_message{
+	color:#F00;
+}
+
+td, th, tr{
+    text-align:center;
+	vertical-align:middle;
+	valign:middle;
+}
+
+th{
+    background-color:#eeeeee;
+}
+
+.block{
+    width:420px;
+    height:270px;
+    padding:0 20px
+    ;border:1px solid #fff;
+    color:#000;
+     margin-top:20px;
+     border-radius:8px;
+     background: white;
+     box-shadow:0 0 15px #222;
+     background: -moz-linear-gradient(top, #fff, #efefef 8%);
+     background: -webkit-gradient(linear, 0 0, 0 100%, from(#f6f6f6), to(#f4f4f4));
+     font:11px/1.5em 'Microsoft YaHei' ;
+     position: absolute;
+     align:center;
+ }
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+    font-size:20px;
+    vertical-align:middle;
+}

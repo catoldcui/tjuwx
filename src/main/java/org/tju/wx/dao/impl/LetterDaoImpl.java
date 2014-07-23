@@ -37,18 +37,44 @@ public class LetterDaoImpl implements LetterDao{
     }
 
     @Override
-    public List findByString(String key, int pageNum, int maxNum ) {
+    public List findByString(final String key, final int pageNum, final int maxNum ) {
         List result = null;
         try{
             // 匹配收件人，寄件人，寄信地址
-            Query query = getHibernateTemplate().getSessionFactory().getCurrentSession()
-                    .createQuery( "from Letter l where l.receiver=:receiver or l.sender=:sender or l.senderaddr=:senderaddr");
-            query.setString("sender", key);
-            query.setString("receiver", key);
-            query.setString("senderaddr", key);
-            query.setMaxResults(maxNum);
-            query.setFirstResult( ( pageNum - 1 ) * maxNum);
-            result = getHibernateTemplate().find(query.toString());
+//            String[] params = {key, key, key};
+//            getHibernateTemplate().find("from Letter l where l.receiver like ':receiver' or l.sender like ':sender' or l.senderaddr like ':senderaddr'", params);
+//            Query query = sessionFactory.getCurrentSession()
+//                    .createQuery( "from Letter l where l.receiver like ':receiver' or l.sender like ':sender' or l.senderaddr like ':senderaddr'");
+//            query.setString("sender", key);
+//            query.setString("receiver", key);
+//            query.setString("senderaddr", key);
+//            query.setMaxResults(maxNum);
+//            query.setFirstResult( ( pageNum - 1 ) * maxNum);
+//            result = getHibernateTemplate().find(query.toString());
+
+            result = getHibernateTemplate().executeFind(new HibernateCallback() {
+                public Object doInHibernate(Session session)
+                        throws HibernateException {
+                    String keyTemp = "'%" + key + "%'";
+//                    Query query = session.createQuery("from Letter l where l.receiver like :receiver or l.sender like :sender or l.senderaddr like :senderaddr");
+//                    query.setString("sender", keyTemp);
+//                    query.setString("receiver", keyTemp);
+//                    query.setString("senderaddr", keyTemp);
+//                    Query query = session.createQuery("from Letter l where l.receiver like ? or l.sender like ? or l.senderaddr like ? order by l.status");
+//                    query.setString(0, keyTemp);
+//                    query.setString(1, keyTemp);
+//                    query.setString(2, keyTemp);
+
+                    Query query = session.createQuery("from Letter l where l.receiver like "+ keyTemp + " or l.sender like "+ keyTemp + " or l.senderaddr like "+ keyTemp + " order by l.status, l.time");
+                    if(maxNum != Integer.MAX_VALUE){
+                        query.setFirstResult( ( pageNum - 1 ) * maxNum);
+                        query.setMaxResults(maxNum);
+                    }
+
+                    System.out.println("query:" + query.getQueryString() + query.toString());
+                    return query.list();
+                }
+            });
         } catch (HibernateException he){
             he.printStackTrace();
         } finally {
@@ -74,8 +100,13 @@ public class LetterDaoImpl implements LetterDao{
     public boolean delete(Letter letter) {
         if(letter != null){
             try{
-                getHibernateTemplate().delete(letter);
-                return true;
+                if(findById(letter.getLid()) != null){
+                    getHibernateTemplate().delete(letter);
+                    return true;
+                } else {
+                    return false;
+                }
+
             } catch (HibernateException he){
                 he.printStackTrace();
                 return false;
@@ -114,8 +145,10 @@ public class LetterDaoImpl implements LetterDao{
             public Object doInHibernate(Session session)
                     throws HibernateException {
                 Query query = session.createQuery("from Letter l order by l.time desc");
-                query.setMaxResults(maxNum);
-                query.setFirstResult( ( pageNum - 1 ) * maxNum);
+                if(maxNum != Integer.MAX_VALUE){
+                    query.setFirstResult( ( pageNum - 1 ) * maxNum);
+                    query.setMaxResults(maxNum);
+                }
                 return query.list();
             }
         });

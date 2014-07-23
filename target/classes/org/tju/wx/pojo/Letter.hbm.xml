@@ -30,7 +30,7 @@
                 type="java.lang.String"
                 column="receiver"
                 length="20"
-                not-null="true"/>
+                not-null="false"/>
 
         <property
             name="sender"
@@ -56,7 +56,7 @@
                 name="status"
                 column="status"
                 type="java.lang.Integer"
-                not-null="true"/>
+                not-null="false"/>
 
     </class>
 </hibernate-mapping>

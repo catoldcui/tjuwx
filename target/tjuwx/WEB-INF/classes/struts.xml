@@ -5,6 +5,8 @@
 
 <struts>
 
+    <constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+
     <package name="default" namespace="/" extends="struts-default">
 
         <action name="index" class="org.tju.wx.action.WXMsgProcessAction"/>
@@ -19,9 +21,30 @@
         </action>
 
         <action name="getletter" class="org.tju.wx.action.LetterAction" method="getAll">
-            <param name="pagenum">1</param>
+            <param name="pageNum">1</param>
             <result name="success">/Admin/letter/letter_list.jsp</result>
             <result name="error">/Admin/letter/index.jsp</result>
+        </action>
+
+        <action name="deleteletter" class="org.tju.wx.action.LetterAction" method="delete">
+            <result name="success">/Admin/letter/letter_list.jsp</result>
+            <result name="error">/Admin/letter/letter_list.jsp</result>
+        </action>
+
+        <action name="backletter" class="org.tju.wx.action.LetterAction" method="back">
+            <result name="success">/Admin/letter/letter_list.jsp</result>
+            <result name="error">/Admin/letter/letter_list.jsp</result>
+        </action>
+
+        <action name="sendletter" class="org.tju.wx.action.LetterAction" method="send">
+            <result name="success">/Admin/letter/letter_list.jsp</result>
+            <result name="error">/Admin/letter/letter_list.jsp</result>
+        </action>
+
+        <action name="searchletter" class="org.tju.wx.action.LetterAction" method="search">
+            <param name="pageNum">1</param>
+            <result name="success">/Admin/letter/search_letter_list.jsp</result>
+            <result name="error">/Admin/letter/search_letter_list.jsp</result>
         </action>
     </package>
 

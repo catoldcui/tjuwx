@@ -64,7 +64,8 @@ public class LetterServiceImpl implements LetterService{
 
     @Override
     public boolean sendLetter(Letter letter) {
-        if(letterDao.findById(letter.getLid()) == null){
+        letter = letterDao.findById(letter.getLid());
+        if(letter == null){
             return false;
         }
 
@@ -74,7 +75,8 @@ public class LetterServiceImpl implements LetterService{
 
     @Override
     public boolean backLetter(Letter letter) {
-        if(letterDao.findById(letter.getLid()) == null){
+        letter = letterDao.findById(letter.getLid());
+        if(letter == null){
             return false;
         }
 
