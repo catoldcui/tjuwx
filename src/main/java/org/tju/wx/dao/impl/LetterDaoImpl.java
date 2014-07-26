@@ -65,7 +65,7 @@ public class LetterDaoImpl implements LetterDao{
 //                    query.setString(1, keyTemp);
 //                    query.setString(2, keyTemp);
 
-                    Query query = session.createQuery("from Letter l where l.receiver like "+ keyTemp + " or l.sender like "+ keyTemp + " or l.senderaddr like "+ keyTemp + " order by l.status, l.time");
+                    Query query = session.createQuery("from Letter l where l.receiver like "+ keyTemp + " or l.sender like "+ keyTemp + " or l.senderaddr like "+ keyTemp + " order by l.status, l.time desc");
                     if(maxNum != Integer.MAX_VALUE){
                         query.setFirstResult( ( pageNum - 1 ) * maxNum);
                         query.setMaxResults(maxNum);
@@ -144,7 +144,7 @@ public class LetterDaoImpl implements LetterDao{
         return getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException {
-                Query query = session.createQuery("from Letter l order by l.time desc");
+                Query query = session.createQuery("from Letter l order by l.status, l.time desc");
                 if(maxNum != Integer.MAX_VALUE){
                     query.setFirstResult( ( pageNum - 1 ) * maxNum);
                     query.setMaxResults(maxNum);

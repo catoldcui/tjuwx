@@ -145,21 +145,39 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
      */
     public String delete(){
         System.out.println("delete lid:" + letter.getLid());
+
         if(letter.getLid() == 0){
             addActionError("删除失败");
-            return ERROR;
-        }
-
-
-        if(!letterService.delete(letter)){
+        } else if(!letterService.delete(letter)){
             addActionError("删除失败");
-            return ERROR;
         } else {
-            pageNum = ActionContext.getContext().getSession().get("pageNum").toString();
-            getAll();
             addActionMessage("删除成功");
-            return SUCCESS;
         }
+
+        // 记录返回页
+        String resultPage = "";
+        if(preAction != null){
+
+            // 获得pageNum
+            if(ActionContext.getContext().getSession().get("pageNum") == null){
+                pageNum = "1";
+            } else {
+                pageNum = ActionContext.getContext().getSession().get("pageNum").toString();
+            }
+            // 判断前一个动作
+            if(preAction.equals("add")){
+                resultPage = "success_from_add";
+                getAll(); // 重新更新
+            } else if(preAction.equals("search")){
+                resultPage = "success_from_search";
+                search();// 重新更新
+            } else {
+                resultPage = ERROR;
+            }
+        } else {
+            resultPage = ERROR;
+        }
+        return resultPage;
     }
 
     /**
@@ -168,24 +186,39 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
      */
     public String send(){
         System.out.println("sender lid:" + letter.getLid());
+
         if(letter.getLid() == 0){
             addActionError("更新失败");
-            return ERROR;
+        } else if(!letterService.sendLetter(letter)){
+            addActionError("更新失败");
+        } else {
+            addActionMessage("更新成功");
         }
 
-        if(!letterService.sendLetter(letter)){
-            addActionError("更新失败");
-            return ERROR;
-        } else {
+        // 记录返回页
+        String resultPage = "";
+        if(preAction != null){
+
+            // 获得pageNum
             if(ActionContext.getContext().getSession().get("pageNum") == null){
                 pageNum = "1";
             } else {
                 pageNum = ActionContext.getContext().getSession().get("pageNum").toString();
             }
-            getAll();
-            addActionMessage("更新成功");
-            return SUCCESS;
+            // 判断前一个动作
+            if(preAction.equals("add")){
+                resultPage = "success_from_add";
+                getAll(); // 重新更新
+            } else if(preAction.equals("search")){
+                resultPage = "success_from_search";
+                search();// 重新更新
+            } else {
+                resultPage = ERROR;
+            }
+        } else {
+            resultPage = ERROR;
         }
+        return resultPage;
     }
 
     /**
@@ -194,24 +227,43 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
      */
     public String back(){
         System.out.println("back lid:" + letter.getLid());
+
         if(letter.getLid() == 0){
             addActionError("更新失败");
-            return ERROR;
-        }
-
-        if(!letterService.backLetter(letter)){
+        } else if(!letterService.backLetter(letter)){
             addActionError("更新失败");
-            return ERROR;
         } else {
             if(ActionContext.getContext().getSession().get("pageNum") == null){
                 pageNum = "1";
             } else {
                 pageNum = ActionContext.getContext().getSession().get("pageNum").toString();
             }
-            getAll();
             addActionMessage("更新成功");
-            return SUCCESS;
         }
+
+        // 记录返回页
+        String resultPage = "";
+        if(preAction != null){
+            // 获得pageNum
+            if(ActionContext.getContext().getSession().get("pageNum") == null){
+                pageNum = "1";
+            } else {
+                pageNum = ActionContext.getContext().getSession().get("pageNum").toString();
+            }
+            // 判断前一个动作
+            if(preAction.equals("add")){
+                resultPage = "success_from_add";
+                getAll(); // 重新更新
+            } else if(preAction.equals("search")){
+                resultPage = "success_from_search";
+                search();// 重新更新
+            } else {
+                resultPage = ERROR;
+            }
+        } else {
+            resultPage = ERROR;
+        }
+        return resultPage;
     }
 
     /**
@@ -220,8 +272,11 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
      */
     public String search(){
         System.out.println("key: " + key + "\npageNum: " + pageNum);
-        if(key.length() < 1 || key.length() > 10){
-            return ERROR;
+        if(key == null){
+            return SUCCESS;
+        }
+        if(key.length() < 1 || key.length() > 20){
+            return SUCCESS;
         }
 
         // pageNum小于等于0 恢复第一页
@@ -230,7 +285,7 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
         try{
             pageN = Integer.parseInt(pageNum);
         } catch (Exception e){
-            return ERROR;
+            return SUCCESS;
         }
 
         if(pageN <= 0){
@@ -258,6 +313,12 @@ public class LetterAction extends ActionSupport implements ModelDriven<Letter>{
 
         List list = letterService.findByString(key, pageN, ELENUM);
         ActionContext.getContext().getSession().put("searchLetterlist", list);
+
+        if(list == null || list.size() == 0){
+            addActionMessage("暂时没有关于“"+ key + "”的信件");
+        } else {
+            addActionMessage("查询成功");
+        }
         return SUCCESS;
     }
 

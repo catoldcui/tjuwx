@@ -12,7 +12,7 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">false</prop>
             </props>
         </property>
         <!-- 指定Hibernate映射文件的路径 -->
@@ -58,7 +58,9 @@
 
     <!-- 配置Action -->
     <bean id="index" class="org.tju.wx.action.WXMsgProcessAction" abstract="false" lazy-init="default" autowire="default">
-
+        <property name="letterService">
+            <ref bean="letterService" />
+        </property>
     </bean>
 
     <bean id="letterAction" class="org.tju.wx.action.LetterAction" abstract="false" lazy-init="default" autowire="default">

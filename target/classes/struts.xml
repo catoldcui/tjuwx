@@ -27,24 +27,27 @@
         </action>
 
         <action name="deleteletter" class="org.tju.wx.action.LetterAction" method="delete">
-            <result name="success">/Admin/letter/letter_list.jsp</result>
-            <result name="error">/Admin/letter/letter_list.jsp</result>
+            <result name="success_from_add">/Admin/letter/letter_list.jsp</result>
+            <result name="success_from_search">/Admin/letter/search_letter_list.jsp</result>
+            <result name="error">Admin/letter/index.jsp</result>
         </action>
 
         <action name="backletter" class="org.tju.wx.action.LetterAction" method="back">
-            <result name="success">/Admin/letter/letter_list.jsp</result>
-            <result name="error">/Admin/letter/letter_list.jsp</result>
+            <result name="success_from_add">/Admin/letter/letter_list.jsp</result>
+            <result name="success_from_search">/Admin/letter/search_letter_list.jsp</result>
+            <result name="error">/Admin/letter/index.jsp</result>
         </action>
 
         <action name="sendletter" class="org.tju.wx.action.LetterAction" method="send">
-            <result name="success">/Admin/letter/letter_list.jsp</result>
-            <result name="error">/Admin/letter/letter_list.jsp</result>
+            <result name="success_from_add">/Admin/letter/letter_list.jsp</result>
+            <result name="success_from_search">/Admin/letter/search_letter_list.jsp</result>
+            <result name="error">Admin/letter/index.jsp</result>
         </action>
 
         <action name="searchletter" class="org.tju.wx.action.LetterAction" method="search">
             <param name="pageNum">1</param>
             <result name="success">/Admin/letter/search_letter_list.jsp</result>
-            <result name="error">/Admin/letter/search_letter_list.jsp</result>
+            <result name="error">/Admin/letter/index.jsp</result>
         </action>
     </package>
 

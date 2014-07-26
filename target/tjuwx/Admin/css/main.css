@@ -2,7 +2,7 @@
 /* CSS Document */
 body{
 	font-family:"微软雅黑";
-	padding-top: 50px;
+	background-color:#eeeeee;
 }
 
 
@@ -33,8 +33,8 @@ th{
 .block{
     width:420px;
     height:270px;
-    padding:0 20px
-    ;border:1px solid #fff;
+    padding:0 20px;
+    border:1px solid #fff;
     color:#000;
      margin-top:20px;
      border-radius:8px;
@@ -46,8 +46,26 @@ th{
      position: absolute;
      align:center;
  }
+ 
+.panel{
+	border:1px solid #fff;
+	color:#000;
+	margin-top:5px;
+	border-radius:8px;
+	background: white;
+	box-shadow:0 0 15px #222;
+	background: -moz-linear-gradient(top, #fff, #efefef 8%);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#f6f6f6), to(#f4f4f4));
+	font:15px/1.5em 'Microsoft YaHei' ;
+	width:100%;
+}
 
 .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
-    font-size:20px;
+    font-size:15px;
     vertical-align:middle;
 }
+
+#searchblock{
+    padding-top:35px;
+}
+

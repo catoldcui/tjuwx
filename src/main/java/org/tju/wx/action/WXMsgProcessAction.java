@@ -2,6 +2,7 @@ package org.tju.wx.action;
 
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.ServletActionContext;
+import org.tju.wx.service.LetterService;
 import org.tju.wx.util.MessageProcessor;
 import org.tju.wx.util.MessageUtil;
 import org.tju.wx.util.SignUtil;
@@ -16,6 +17,16 @@ import java.util.Map;
  * Created by Legend on 2014/7/21.
  */
 public class WXMsgProcessAction extends ActionSupport{
+    private LetterService letterService;
+
+    public LetterService getLetterService() {
+        return letterService;
+    }
+
+    public void setLetterService(LetterService letterService) {
+        this.letterService = letterService;
+    }
+
     @Override
     public String execute() throws Exception {
         HttpServletRequest request = ServletActionContext.getRequest();
@@ -34,6 +45,7 @@ public class WXMsgProcessAction extends ActionSupport{
         if(signature != null) {
             String method = ServletActionContext.getRequest().getMethod();
             if (method.equals("POST")) {
+                request.getSession().setAttribute("letterservice", letterService);
                 // 调用核心服务类接收处理请求
                 String respXml = MessageProcessor.processRequest(request);
                 out.print(respXml);
